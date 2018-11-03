@@ -146,7 +146,7 @@ public class Node {
 			String regexString = "";
 			System.err.println("Checking wordslot:");
 
-			if (wordSlot.axis == "horizontal") {//Shouldn't we compare to a macro constant or a boolean?
+			if (wordSlot.axis == "horizontal") {//Shouldn't
 				for (int col = wordSlot.origincol; col<wordSlot.origincol+wordSlot.length; col++) {
 					if (guess[wordSlot.originrow][col] == "_") {
 						regexString = regexString + ".";
@@ -156,7 +156,7 @@ public class Node {
 				}
 			}
 
-			if (wordSlot.axis == "vertical") {//Shouldn't we compare to a macro constant?
+			if (wordSlot.axis == "vertical") {
 				for (int row = wordSlot.originrow; row<wordSlot.originrow+wordSlot.length; row++) {
 					if (guess[row][wordSlot.origincol] == "_") {
 						regexString = regexString + ".";
@@ -312,7 +312,13 @@ public class Node {
 		// for (int row = 0; row < max_row; row++) {
 		// 	System.arraycopy(this.guess[row], '\u0000', copy.guess[row], '\u0000', max_col);
 		// }
-		copy.guess = guess;
+		copy.guess = new String[guess[0].length][guess[0].length];
+		for (int i = 0; i < guess[0].length; i++){
+			for (int j = 0; j < guess[0].length; j++){
+				copy.guess[i][j] = new String(guess[i][j]);
+			}
+		}
+//		copy.guess = guess;
 		copy.currentWordCount = currentWordCount + 1;
 		return copy;
 	}
