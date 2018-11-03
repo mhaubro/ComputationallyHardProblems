@@ -77,6 +77,8 @@ public class Node {
 			for (int col = 0; col < max_col; col++) {
 				// If you find a tile that doesn't contain a wall, and that has not already been assigned a value by this method
 				if (!walls[row][col] && horizontalWordLength[row][col] == 0) {
+					System.err.println("Horizontal word:");
+
 					int currentWordLength = 1;
 					while (col+currentWordLength < max_col && !walls[row][col+currentWordLength]) {
 						currentWordLength++;
@@ -85,6 +87,7 @@ public class Node {
 					tempWordSlots.add(new WordSlot(row, col, currentWordLength, "horizontal", finalWordCount));
 					finalWordCount++;
 
+					System.err.println(currentWordLength);
 
 					// At this point the end of the word has been found, and currentWordLength has the correct value
 					// Now we need to assign this value to every corresponding tile
@@ -94,6 +97,8 @@ public class Node {
 				}
 				// If you find a tile that doesn't contain a wall, and that has not already been assigned a value by this method
 				if (!walls[row][col] && verticalWordLength[row][col] == 0) {
+					System.err.println("vertical word:");
+
 
 					int currentWordLength = 1;
 					while (row+currentWordLength < max_row && !walls[row+currentWordLength][col]) {
@@ -106,7 +111,7 @@ public class Node {
 					// At this point the end of the word has been found, and currentWordLength has the correct value
 					// Now we need to assign this value to every corresponding tile
 					for (int i = 0; i<currentWordLength; i++) {
-						horizontalWordLength[row+i][col] = currentWordLength;
+						verticalWordLength[row+i][col] = currentWordLength;
 					}
 				}
 			}
@@ -139,8 +144,9 @@ public class Node {
 
 		for (WordSlot wordSlot : wordSlots) {
 			String regexString = "";
+			System.err.println("Checking wordslot:");
 
-			if (wordSlot.axis == "horizontal") {
+			if (wordSlot.axis == "horizontal") {//Shouldn't we compare to a macro constant or a boolean?
 				for (int col = wordSlot.origincol; col<wordSlot.origincol+wordSlot.length; col++) {
 					if (guess[wordSlot.originrow][col] == "_") {
 						regexString = regexString + ".";
@@ -150,7 +156,7 @@ public class Node {
 				}
 			}
 
-			if (wordSlot.axis == "vertical") {
+			if (wordSlot.axis == "vertical") {//Shouldn't we compare to a macro constant?
 				for (int row = wordSlot.originrow; row<wordSlot.originrow+wordSlot.length; row++) {
 					if (guess[row][wordSlot.origincol] == "_") {
 						regexString = regexString + ".";

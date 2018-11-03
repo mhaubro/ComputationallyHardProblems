@@ -53,29 +53,29 @@ public class CPC {
 	public static Boolean decoder() {
 		InputStreamReader in = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(in);
-        String fileName = "test.cbc";
-		String input = "";
+//      String fileName = "test.cbc";
+//		String input = "";
 
 		List<String> all_lines = new ArrayList<String>();
 
 		try {
-			// String currentLine = br.readLine();
+			String currentLine = br.readLine();
 
-			// while (currentLine != null || currentLine == "") {
-			// 	all_lines.add(currentLine);	            
-			// 	currentLine = br.readLine();
-			// }
+			while (currentLine != null || currentLine == "") {
+				all_lines.add(currentLine);	            
+				currentLine = br.readLine();
+			}
 
-			// String[] line = all_lines.toArray(new String[0]);
+			String[] line = all_lines.toArray(new String[0]);
 
-			byte[] buf = Files.readAllBytes(Paths.get(fileName));
-			input = new String(buf,"UTF-8");
+			// byte[] buf = Files.readAllBytes(Paths.get(fileName));
+			// input = new String(buf,"UTF-8");
 
-			System.err.println("Succesfully opened the file '"+fileName+"'. Here is the map:");
-			System.err.println(input);
-			System.err.println();
+			// System.err.println("Succesfully opened the file '"+fileName+"'. Here is the map:");
+			// System.err.println(input);
+			// System.err.println();
 
-			String[] line = input.split("\\r?\\n");
+			// String[] line = input.split("\\r?\\n");
 
 
 			// Matches the syntax of the variable declaration line
@@ -239,7 +239,9 @@ public class CPC {
 			}
 
 			strategy.addToExplored(leafNode);
-			
+			if (leafNode == null){
+				System.err.println("This is bad");
+			}
 			// Somehow deal with early termination here
 			for (Node n : leafNode.getExpandedNodes()) { // The list of expanded nodes is shuffled randomly; see Node.java.
 				if (!strategy.isExplored(n) && !strategy.inFrontier(n)) {
