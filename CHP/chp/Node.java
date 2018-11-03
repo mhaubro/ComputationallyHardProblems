@@ -144,7 +144,7 @@ public class Node {
 
 		for (WordSlot wordSlot : wordSlots) {
 			String regexString = "";
-			System.err.println("Checking wordslot:");
+			//System.err.println("Checking wordslot lenght: " + wordSlot.length);
 
 			if (wordSlot.axis == "horizontal") {//Shouldn't
 				for (int col = wordSlot.origincol; col<wordSlot.origincol+wordSlot.length; col++) {
@@ -177,12 +177,12 @@ public class Node {
 						// word is a valid match for wordSlot and should be considered target for expansion
 						Node newNode = this.ChildNode();
 						if (wordSlot.axis == "horizontal") {
-							for (int i = 0; i<wordSlot.length-1; i++) {
+							for (int i = 0; i<wordSlot.length; i++) {
 								newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = Character.toString(word.charAt(i));
 							}
 						}
 						if (wordSlot.axis == "vertical") {
-							for (int i = 0; i<wordSlot.length-1; i++) {
+							for (int i = 0; i<wordSlot.length; i++) {
 								newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = Character.toString(word.charAt(i));
 							}
 						}
