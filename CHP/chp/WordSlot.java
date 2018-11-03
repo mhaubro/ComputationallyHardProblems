@@ -14,4 +14,44 @@ public class WordSlot {
 		this.axis = axis;
 		this.id = id;
 	}
+
+	String getCurrentWord(char[][] world){
+		String word = "";
+		if (axis == "horizontal"){
+			for (int i = 0; i < length; i++){
+				word = word + world[originrow][origincol + i];
+			}			
+		} else {
+			for (int i = 0; i < length; i++){
+				word = word + world[originrow + i][origincol];
+			}						
+		}
+		return word;		
+	}
+
+	boolean isGoalState(char[][] world, String[] language){
+		String word = "";
+		if (axis == "horizontal"){
+			for (int i = 0; i < length; i++){
+				word = word + world[originrow][origincol + i];
+			}			
+		} else {
+			for (int i = 0; i < length; i++){
+				word = word + world[originrow + i][origincol];
+			}						
+		}
+
+		// System.err.println(word);
+		// System.err.println("Matching with: ");
+
+		for (String s : language){
+		//	System.err.println(s);
+			if (s.equals(word)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 }

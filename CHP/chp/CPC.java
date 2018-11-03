@@ -44,7 +44,7 @@ public class CPC {
 				System.exit(0);
 			} else {
 				System.err.println("Found this solution:");
-				System.out.println(solution);
+				System.out.print(solution);
 				System.exit(0);
 			}
 		}
@@ -154,18 +154,6 @@ public class CPC {
 				}
 			}
 
-			for (int i = 0; i < declaredMatrixWidth; i++){
-				for (int j = 0; j < declaredMatrixWidth; j++){
-					if (walls[i][j]){
-						//System.out.print('#');
-					} else {
-						//System.out.print('_');						
-					}
-						//System.out.print(';');
-				}
-					//System.out.println();
-			}
-
 			System.err.println("Line 2-"+(1+declaredMatrixWidth)+" conforms to the syntax of the board: ");
 			System.err.println();
 
@@ -246,6 +234,11 @@ public class CPC {
 			}
 
 			Node leafNode = strategy.getAndRemoveLeaf();
+
+			//It will never be possible to make it on from this state
+			if (!leafNode.isLegalState()){
+				continue;
+			}
 
 			if (leafNode.isGoalState()) {
 				return leafNode;
