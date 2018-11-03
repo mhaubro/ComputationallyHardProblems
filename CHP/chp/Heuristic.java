@@ -8,12 +8,23 @@ public abstract class Heuristic implements Comparator<Node> {
 
 	}
 
+	// The heuristic should be quick to calculate, as it is computed a lot of times
 	public int h(Node n) {
 		// unsolved goal count
-		int missingWords = n.finalWordCount - n.currentWordCount;
-		int goalBias = missingWords * 100;
+		//int missingWords = n.finalWordCount - n.currentWordCount;
+		//int goalBias = missingWords * 100;
 
-		return (goalBias);
+		// int penalty = 0;
+		// // punish long unsolved words heavily
+		// for (WordSlot w : n.wordSlots) {
+		// 	if (!w.isGoalState(n.guess, n.language)) {
+		// 		penalty = penalty * w.length;
+		// 	}
+		// }
+
+		// return (penalty);
+
+		return (n.maxTileCount - n.currentFilledTileCount) * n.g();
 	}
     
 	public abstract int f(Node n);

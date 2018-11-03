@@ -20,20 +20,27 @@ public class CPC {
 
 	public static Set<String> alphabet = new HashSet<>();
 	public static String[] language;
+	public static String languageAsOne;
 	public static boolean walls[][];
 	public static char[][] initialMap;
+	public static int maxTileCount;
 
 
 	public static void main(String args[]){
 		if (!decoder()) {
 			System.err.println("System input is invalid.");
 			System.out.println("NO");
+			System.exit(0);
 		} else {
 			Node initial = new Node(null);
 			initial.walls = walls;
 			initial.language = language;
+			initial.languageAsOne = languageAsOne;
 			initial.initValues(walls.length, walls.length);
+			initial.currentFilledTileCount = 0;
+			initial.maxTileCount = maxTileCount;
 			initial.guess = initialMap;
+
 
 			Strategy strategy = new StrategyBestFirst(new AStar(initial));
 			Node solution = Search(strategy, initial);
@@ -44,6 +51,7 @@ public class CPC {
 				System.exit(0);
 			} else {
 				System.err.println("Found this solution:");
+				//System.out.println("YES");
 				System.out.print(solution);
 				System.exit(0);
 			}
@@ -102,6 +110,12 @@ public class CPC {
 			System.err.println("declaredMatrixWidth: "+declaredMatrixWidth);
 			System.err.println();
 
+			if (declaredSymbolCount < 1 || declaredAcceptableStringCount < 1 || declaredMatrixWidth < 1) {
+				System.err.println("Values declared in line 0 do not make sense");
+				System.out.println("NO");
+				System.exit(0);
+			}
+
 
 			try {line[1].length();} catch(ArrayIndexOutOfBoundsException exception) {
 			    System.err.println("Line 1 does not exist!");
@@ -148,6 +162,7 @@ public class CPC {
 						walls[i][j] = true;
 						initialMap[i][j] = '#';
 					} else if (lineContent[j].equals("_")) {
+						maxTileCount++;
 						initialMap[i][j] = '_';
 						walls[i][j] = false;//Might be unnecessary
 					}
@@ -188,6 +203,7 @@ public class CPC {
 
 			language = new String[tempLanguage.size()];
 			language = tempLanguage.toArray(language);
+			languageAsOne = String.join("\n", language);
 
 			if (language.length != declaredAcceptableStringCount) {
 				System.err.println("Mismatch between expected amount of acceptable strings and actual strings.");
@@ -224,7 +240,7 @@ public class CPC {
 
 		int iterations = 0;
 		while (true) {
-            if (true) {
+            if ((iterations % 100) == 0) {
 				System.err.println(strategy.searchStatus());
 			}
 
@@ -235,7 +251,7 @@ public class CPC {
 
 			Node leafNode = strategy.getAndRemoveLeaf();
 
-			//It will never be possible to make it on from this state
+			// This state has at least one word slot that can never be satisfied, and can therefor never be part of the real solution
 			if (!leafNode.isLegalState()){
 				continue;
 			}
