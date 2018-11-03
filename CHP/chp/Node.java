@@ -184,11 +184,11 @@ public class Node {
 						regexString = regexString + '.';
 					} else {
 						regexString = regexString + guess[wordSlot.originrow][col];
-					}	
+					}
 				}
 			}
 
-			if (wordSlot.axis == "vertical") {
+			else {//Vertical
 				for (int row = wordSlot.originrow; row<wordSlot.originrow+wordSlot.length; row++) {
 					if (guess[row][wordSlot.origincol] == '_') {
 						regexString = regexString + '.';
@@ -220,12 +220,15 @@ public class Node {
 								newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = (word.charAt(i));
 							}
 						}
-						if (wordSlot.axis == "vertical") {
+						else {
 							for (int i = 0; i<wordSlot.length; i++) {
 								newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = (word.charAt(i));
 							}
 						}
-						expandedNodes.add(newNode);
+									//It will never be possible to make it on from this state
+						if (newNode.isLegalState()){
+							expandedNodes.add(newNode);
+						}
 					}
 				}
 
