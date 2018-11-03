@@ -21,7 +21,7 @@ public class CPC {
 	public static Set<String> alphabet = new HashSet<>();
 	public static String[] language;
 	public static boolean walls[][];
-	public static String[][] initialMap;
+	public static char[][] initialMap;
 
 
 	public static void main(String args[]){
@@ -124,7 +124,7 @@ public class CPC {
 			System.err.println();
 
 			walls = new boolean[declaredMatrixWidth][declaredMatrixWidth];
-			initialMap = new String[declaredMatrixWidth][declaredMatrixWidth];
+			initialMap = new char[declaredMatrixWidth][declaredMatrixWidth];
 
 			// Matches the syntax of the matrix
 			for (int i=0; i<declaredMatrixWidth; i++) {
@@ -143,14 +143,27 @@ public class CPC {
 				// Save map into data structure
 				String[] lineContent = line[2+i].split(";");
 				for (int j=0; j<lineContent.length; j++) {
-					if (lineContent[j] == "#") {
+					if (lineContent[j].charAt(0) == '#') {
 						// Check if row/col is correct
 						walls[i][j] = true;
-						initialMap[i][j] = "#";
+						initialMap[i][j] = '#';
 					} else if (lineContent[j].equals("_")) {
-						initialMap[i][j] = "_";
+						initialMap[i][j] = '_';
+						walls[i][j] = false;//Might be unnecessary
 					}
 				}
+			}
+
+			for (int i = 0; i < declaredMatrixWidth; i++){
+				for (int j = 0; j < declaredMatrixWidth; j++){
+					if (walls[i][j]){
+						//System.out.print('#');
+					} else {
+						//System.out.print('_');						
+					}
+						//System.out.print(';');
+				}
+					//System.out.println();
 			}
 
 			System.err.println("Line 2-"+(1+declaredMatrixWidth)+" conforms to the syntax of the board: ");
@@ -251,5 +264,4 @@ public class CPC {
 			iterations++;
 		}
 	}
-
 }

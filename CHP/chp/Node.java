@@ -39,7 +39,7 @@ public class Node {
 	// These values are specific to each instance of Node
 
 	// Contains "#" for walls, "_" for yet-to-be-guessed titles, and letters from the alphabet in all other cases
-	public String[][] guess;
+	public char[][] guess;
 	public int currentWordCount;
 
 	public Node parent;
@@ -61,7 +61,7 @@ public class Node {
 	public static void initValues(int row, int col) {
         max_row = row;
         max_col = col;
-        walls = new boolean[max_row][max_col];
+        //walls = new boolean[max_row][max_col];
         horizontalWordLength = new int[max_row][max_col];
         verticalWordLength   = new int[max_row][max_col];
 
@@ -148,7 +148,7 @@ public class Node {
 
 			if (wordSlot.axis == "horizontal") {//Shouldn't
 				for (int col = wordSlot.origincol; col<wordSlot.origincol+wordSlot.length; col++) {
-					if (guess[wordSlot.originrow][col] == "_") {
+					if (guess[wordSlot.originrow][col] == '_') {
 						regexString = regexString + ".";
 					} else {
 						regexString = regexString + guess[wordSlot.originrow][col];
@@ -158,7 +158,7 @@ public class Node {
 
 			if (wordSlot.axis == "vertical") {
 				for (int row = wordSlot.originrow; row<wordSlot.originrow+wordSlot.length; row++) {
-					if (guess[row][wordSlot.origincol] == "_") {
+					if (guess[row][wordSlot.origincol] == '_') {
 						regexString = regexString + ".";
 					} else {
 						regexString = regexString + guess[row][wordSlot.origincol];
@@ -166,6 +166,8 @@ public class Node {
 				}
 			}
 			
+			//System.out.println("Regexstring: " + regexString);
+
 			if (!regexString.contains(".")) {
 				// The wordSlot has already been fully filled by a word
 				// No need to do any expansions
@@ -178,12 +180,12 @@ public class Node {
 						Node newNode = this.ChildNode();
 						if (wordSlot.axis == "horizontal") {
 							for (int i = 0; i<wordSlot.length; i++) {
-								newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = Character.toString(word.charAt(i));
+								newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = (word.charAt(i));
 							}
 						}
 						if (wordSlot.axis == "vertical") {
 							for (int i = 0; i<wordSlot.length; i++) {
-								newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = Character.toString(word.charAt(i));
+								newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = (word.charAt(i));
 							}
 						}
 						expandedNodes.add(newNode);
@@ -312,10 +314,10 @@ public class Node {
 		// for (int row = 0; row < max_row; row++) {
 		// 	System.arraycopy(this.guess[row], '\u0000', copy.guess[row], '\u0000', max_col);
 		// }
-		copy.guess = new String[guess[0].length][guess[0].length];
+		copy.guess = new char[guess[0].length][guess[0].length];
 		for (int i = 0; i < guess[0].length; i++){
 			for (int j = 0; j < guess[0].length; j++){
-				copy.guess[i][j] = new String(guess[i][j]);
+				copy.guess[i][j] = (guess[i][j]);
 			}
 		}
 //		copy.guess = guess;
