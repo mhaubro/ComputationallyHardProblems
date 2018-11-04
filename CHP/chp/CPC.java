@@ -139,7 +139,6 @@ public class CPC {
 
 			walls = new boolean[declaredMatrixWidth][declaredMatrixWidth];
 			initialMap = new char[declaredMatrixWidth][declaredMatrixWidth];
-
 			// Matches the syntax of the matrix
 			for (int i=0; i<declaredMatrixWidth; i++) {
 
@@ -251,16 +250,18 @@ public class CPC {
 
 			Node leafNode = strategy.getAndRemoveLeaf();
 
-			// This state has at least one word slot that can never be satisfied, and can therefor never be part of the real solution
+			//Running this before checking legality will make sure we will only check legality of a node once.
+			strategy.addToExplored(leafNode);
+
 			if (!leafNode.isLegalState()){
 				continue;
 			}
 
+			// This state has at least one word slot that can never be satisfied, and can therefor never be part of the real solution
 			if (leafNode.isGoalState()) {
 				return leafNode;
 			}
 
-			strategy.addToExplored(leafNode);
 			if (leafNode == null){
 				System.err.println("This is bad");
 			}

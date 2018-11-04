@@ -36,7 +36,8 @@ public class Node {
 	public static Set<String> alphabet = new HashSet<>();
 
 	// A list of every accepted word
-	public static String[] language; 
+	public static String[] language;
+	public static String[][] sortedLanguages;//Size [maxLenghtOfWord][#words]
 	public static String languageAsOne;
 	// Could saved in a better (sorted) datastructure with faster searches
 
@@ -50,6 +51,12 @@ public class Node {
 	public Node parent;
 	private int g;
 	private int _hash = 0;
+
+
+	//Checks if a language contains a word
+	public boolean languageContains(String word){
+		return true;
+	}
 
 	// Constructor - you can only construct a node after you have defined the initial values
 	public Node(Node parent) {
@@ -124,6 +131,11 @@ public class Node {
 
 		wordSlots = new WordSlot[tempWordSlots.size()];
 		wordSlots = tempWordSlots.toArray(wordSlots);
+
+		for (int i = 0; i < max_row; i++){
+
+		}
+
 	}
 
 	public int g() {
@@ -225,10 +237,13 @@ public class Node {
 								newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = (word.charAt(i));
 							}
 						}
-									//It will never be possible to make it on from this state
-						if (newNode.isLegalState()){
-							expandedNodes.add(newNode);
-						}
+						//We risk checking if something is legal many times. If we instead
+						//Add it to 'explored', and only expand if it's legal, we'll only do it once.
+						//This will make us expand many more nodes, but it will be faster.
+						// if (newNode.isLegalState()){
+						// 	expandedNodes.add(newNode);
+						// }
+						expandedNodes.add(newNode);
 					}
 				}
 
