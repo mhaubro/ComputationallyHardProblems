@@ -63,9 +63,6 @@ public class CPC {
 	public static Boolean decoder() {
 		InputStreamReader in = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(in);
-//      String fileName = "test.cbc";
-//		String input = "";
-
 		List<String> all_lines = new ArrayList<String>();
 
 		try {
@@ -78,29 +75,15 @@ public class CPC {
 
 			String[] line = all_lines.toArray(new String[0]);
 
-			// byte[] buf = Files.readAllBytes(Paths.get(fileName));
-			// input = new String(buf,"UTF-8");
-
-			// System.err.println("Succesfully opened the file '"+fileName+"'. Here is the map:");
-			// System.err.println(input);
-			// System.err.println();
-
-			// String[] line = input.split("\\r?\\n");
-
-
 			// Matches the syntax of the variable declaration line
 			try {line[0].length();} catch(ArrayIndexOutOfBoundsException exception) {
 			    System.err.println("Line 0 does not exist!");
 				return false;
 			}
 
-			// Code judge wtf?
-			// if (!line[0].matches("^\\d+;\\d+;\\d$")) {
-			// 	System.err.println("Line 0 contains invalid syntax!");
-			// 	try {Thread.sleep(1000);} catch (InterruptedException e) {};
-			// 	return false;
-			// }
-
+			if (!line[0].matches("^\\d+;\\d+;\\d$")){
+				return false;
+			}
 
 			String[] header = line[0].split(";");
 

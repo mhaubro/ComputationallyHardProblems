@@ -49,39 +49,4 @@ public abstract class Heuristic implements Comparator<Node> {
 			return "A* evaluation";
 		}
 	}
-
-	public static class WeightedAStar extends Heuristic {
-		private int W;
-
-		public WeightedAStar(Node initialState, int W) {
-			super(initialState);
-			this.W = W;
-		}
-
-		@Override
-		public int f(Node n) {
-			return n.g() + this.W * this.h(n);
-		}
-
-		@Override
-		public String toString() {
-			return String.format("WA*(%d) evaluation", this.W);
-		}
-	}
-
-	public static class Greedy extends Heuristic {
-		public Greedy(Node initialState) {
-			super(initialState);
-		}
-
-		@Override
-		public int f(Node n) {
-			return this.h(n);
-		}
-
-		@Override
-		public String toString() {
-			return "Greedy evaluation";
-		}
-	}
 }

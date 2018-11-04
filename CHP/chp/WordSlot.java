@@ -41,11 +41,7 @@ public class WordSlot {
 			}						
 		}
 
-		// System.err.println(word);
-		// System.err.println("Matching with: ");
-
 		for (String s : language){
-		//	System.err.println(s);
 			if (s.equals(word)){
 				return true;
 			}

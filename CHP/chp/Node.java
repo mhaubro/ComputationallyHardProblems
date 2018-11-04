@@ -135,13 +135,7 @@ public class Node {
 	}
 
 	public boolean isGoalState() {
-		// for (WordSlot w : wordSlots){
-		// 	if (!w.isGoalState(guess, language))
-		// 		return false;
-		// }
-		// return true;
 		return (currentFilledTileCount == maxTileCount);
-//		return (currentWordCount == finalWordCount);
 	}
 
 //Checks if this state can ever become legal
@@ -234,59 +228,6 @@ public class Node {
 			}
 		}
 
-		// for (int row = 0; row < max_row; row++) {
-		// 	for (int col = 0; col < max_col; col++) {
-		// 		if (guess[row][col] == "_".charAt(0)) {
-		// 			//System.err.println("Tile at "+row+","+col+" is _");
-		// 			//System.err.println(alphabet);
-		// 			for (String letter : alphabet) {
-		// 				//System.err.println("Assigned "+letter+" to tile");
-		// 				Node newNode = this.ChildNode();
-		// 				newNode.guess[row][col] = letter.charAt(0);
-		// 				newNode.currentFilledTileCount = currentFilledTileCount+1;
-		// 				//System.err.println(newNode);
-		// 				expandedNodes.add(newNode);
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-
-
-
-				// boolean foundMatchForSlot = false;
-				// for (String word : language) {
-				// 	if (word.matches("^"+regexString+"$")) {
-				// 		foundMatchForSlot = true;
-				// 		//System.err.println("Matching word!");
-				// 		// word is a valid match for wordSlot and should be considered target for expansion
-				// 		Node newNode = this.ChildNode();
-				// 		newNode.currentFilledTileCount = currentFilledTileCount + unfilledLetters;
-				// 		if (wordSlot.axis == "horizontal") {
-				// 			for (int i = 0; i<wordSlot.length; i++) {
-				// 				newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = (word.charAt(i));
-				// 			}
-				// 		}
-				// 		if (wordSlot.axis == "vertical") {
-				// 			for (int i = 0; i<wordSlot.length; i++) {
-				// 				newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = (word.charAt(i));
-				// 			}
-				// 		}
-				// 		expandedNodes.add(newNode);
-				// 	}
-				// }
-
-				// if (!foundMatchForSlot) {
-				// 	// Tried every word for current wordslot with no matches - current guess can never be part of the solution
-				// 	//return null;
-				// }
-			
-			// check whether wordSlot has been filled
-			// yes -> skip it
-			// no  -> compose regular expression based on the wordSlot and current guess values
-			//        find matches in language based on regular expression
-			//        add every possible match to expandedNodes
-
 		Collections.shuffle(expandedNodes, RND);
 		return expandedNodes;
 	}
@@ -295,17 +236,12 @@ public class Node {
 	// A child node contains some of the information from the current node. We copy the information efficiently here
 	private Node ChildNode() {
 		Node copy = new Node(this);
-		// Efficient copying of 2d-matrix
-		// for (int row = 0; row < max_row; row++) {
-		// 	System.arraycopy(this.guess[row], '\u0000', copy.guess[row], '\u0000', max_col);
-		// }
 		copy.guess = new char[guess[0].length][guess[0].length];
 		for (int i = 0; i < guess[0].length; i++){
 			for (int j = 0; j < guess[0].length; j++){
 				copy.guess[i][j] = guess[i][j];
 			}
 		}
-//		copy.guess = guess;
 		copy.currentWordCount = currentWordCount + 1;
 		return copy;
 	}
@@ -322,21 +258,21 @@ public class Node {
 		return this._hash;
 	}
 
-	// @Override
-	// public boolean equals(Object obj) {
-	// 	if (this == obj)
-	// 		return true;
-	// 	if (obj == null)
-	// 		return false;
-	// 	if (this.getClass() != obj.getClass())
-	// 		return false;
-	// 	Node other = (Node) obj;
-	// 	if (this.agent.locRow != other.agent.locRow || this.agent.locCol != other.agent.locCol)
-	// 		return false;
-	// 	if (!Arrays.deepEquals(this.boxesOnMap, other.boxesOnMap))
-	// 		return false;
-	// 	return true;
-	// }
+	@Override
+	public boolean equals(Object obj) {
+    	if (obj == null || !(obj instanceof Node)){
+    		return false;
+    	}
+    	Node other = (Node) obj;
+		for (int i = 0; i < guess[0].length; i++){
+			for (int j = 0; j < guess[0].length; j++){
+				if(other.guess[i][j] != this.guess[i][j]){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	@Override
 	public String toString() {
