@@ -82,7 +82,7 @@ public class CPC {
 			}
 
 			//Code judge wtf?
-			if (!line[0].matches("^\\d+;\\d+;\\d$")) {
+			if (!line[0].matches("^\\d+;\\d+;\\d+;?$")) {
 				System.err.println("Line 0 contains invalid syntax!");
 				try {Thread.sleep(1000);} catch (InterruptedException e) {};
 				return false;
