@@ -165,68 +165,73 @@ public class Node {
 		//System.err.println("Current Node:");
         //System.err.println(this);
 
-		int remainingWordCount = (finalWordCount-currentWordCount);
+//		int remainingWordCount = (finalWordCount-currentWordCount);
 		ArrayList<Node> expandedNodes = new ArrayList<Node>();
 
-		for (WordSlot wordSlot : wordSlots) {
-			String regexString = "";
-			//System.err.println("Checking wordslot length: " + wordSlot.length);
 
-			if (wordSlot.axis == "horizontal") {
-				for (int col = wordSlot.origincol; col<wordSlot.origincol+wordSlot.length; col++) {
-					if (guess[wordSlot.originrow][col] == '_') {
-						regexString = regexString + '.';
-					} else {
-						regexString = regexString + guess[wordSlot.originrow][col];
-					}
+		WordSlot wordSlot = wordSlots[g];
+		String regexString = "";
+		//System.err.println("Checking wordslot length: " + wordSlot.length);
+
+		if (wordSlot.axis == "horizontal") {
+			for (int col = wordSlot.origincol; col<wordSlot.origincol+wordSlot.length; col++) {
+				if (guess[wordSlot.originrow][col] == '_') {
+					regexString = regexString + '.';
+				} else {
+					regexString = regexString + guess[wordSlot.originrow][col];
 				}
 			}
+		}
 
-			else {//Vertical
-				for (int row = wordSlot.originrow; row<wordSlot.originrow+wordSlot.length; row++) {
-					if (guess[row][wordSlot.origincol] == '_') {
-						regexString = regexString + '.';
-					} else {
-						regexString = regexString + guess[row][wordSlot.origincol];
-					}
+		else {//Vertical
+			for (int row = wordSlot.originrow; row<wordSlot.originrow+wordSlot.length; row++) {
+				if (guess[row][wordSlot.origincol] == '_') {
+					regexString = regexString + '.';
+				} else {
+					regexString = regexString + guess[row][wordSlot.origincol];
 				}
 			}
-			
-			// count the number of unfilled letters this word would fill
-			int unfilledLetters = regexString.length() - regexString.replace(".", "").length();
-			if (unfilledLetters == 0) {
-				// The wordSlot has already been fully filled by a word
-				// No need to do any expansions
-			} else {
-				Pattern p = Pattern.compile("^("+regexString+")$", Pattern.MULTILINE);
-				Matcher m = p.matcher(languageAsOne);
+		}
+		
+		// count the number of unfilled letters this word would fill
+		int unfilledLetters = regexString.length() - regexString.replace(".", "").length();
+		if (unfilledLetters == 0) {
+			Node n = this.ChildNode();
+			n.currentFilledTileCount = currentFilledTileCount + unfilledLetters;
+			expandedNodes.add(n);
+			// The wordSlot has already been fully filled by a word
+			// No need to do any expansions
+		} else {
+			Pattern p = Pattern.compile("^("+regexString+")$", Pattern.MULTILINE);
+			Matcher m = p.matcher(languageAsOne);
+			while (m.find()){
+				// Just search once
+				for (int matchIndex = 0; matchIndex < m.groupCount(); matchIndex++) {
+					String word = m.group(matchIndex);
+					//System.err.println("'"+word+"' is match for wordSlot "+wordSlot.id+"'s' '"+regexString+"'");
+					// word is a valid match for wordSlot and should be considered target for expansion
+					Node newNode = this.ChildNode();
+					newNode.currentFilledTileCount = currentFilledTileCount + unfilledLetters;
+					//System.err.println("maxTileCount " + maxTileCount + " currentfilledtile " + newNode.currentFilledTileCount);
 
-				while (m.find()){
-					// Just search once
-					for (int matchIndex = 0; matchIndex < m.groupCount(); matchIndex++) {
-						String word = m.group(matchIndex);
-						// System.err.println("'"+word+"' is match for wordSlot "+wordSlot.id+"'s' '"+regexString+"'");
-						// word is a valid match for wordSlot and should be considered target for expansion
-						Node newNode = this.ChildNode();
-						newNode.currentFilledTileCount = currentFilledTileCount + unfilledLetters;
-						if (wordSlot.axis == "horizontal") {
-							for (int i = 0; i<wordSlot.length; i++) {
-								newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = (word.charAt(i));
-							}
+					if (wordSlot.axis == "horizontal") {
+						for (int i = 0; i<wordSlot.length; i++) {
+							newNode.guess[wordSlot.originrow][wordSlot.origincol+i] = (word.charAt(i));
 						}
-						else {
-							for (int i = 0; i<wordSlot.length; i++) {
-								newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = (word.charAt(i));
-							}
+					}
+					else {
+						for (int i = 0; i<wordSlot.length; i++) {
+							newNode.guess[wordSlot.originrow+i][wordSlot.origincol] = (word.charAt(i));
 						}
+					}
 									//It will never be possible to make it on from this state
-						if (newNode.isLegalState()){
-							expandedNodes.add(newNode);
-						}
+					if (newNode.isLegalState()){
+						expandedNodes.add(newNode);
 					}
 				}
 			}
 		}
+		
 
 		Collections.shuffle(expandedNodes, RND);
 		return expandedNodes;
@@ -253,6 +258,7 @@ public class Node {
 			int result = 1;
 			result = prime * result + Arrays.deepHashCode(guess);
 			result = prime * result + Arrays.deepHashCode(walls);
+			result = prime * result * g;
 			this._hash = result;
 		}
 		return this._hash;
@@ -270,6 +276,9 @@ public class Node {
 					return false;
 				}
 			}
+		}
+		if (other.g == g){
+			return false;
 		}
 		return true;
 	}
