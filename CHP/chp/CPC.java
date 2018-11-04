@@ -230,8 +230,10 @@ public class CPC {
 		strategy.addToFrontier(startNode);
 
 		int iterations = 0;
+		Node leafNode = null;
 		while (true) {
             if ((iterations % 100) == 0) {
+            	System.err.println(leafNode);
 				System.err.println(strategy.searchStatus());
 			}
 
@@ -246,7 +248,7 @@ public class CPC {
 			// 	return null;
 			// }
 
-			Node leafNode = strategy.getAndRemoveLeaf();
+			leafNode = strategy.getAndRemoveLeaf();
 
 			// This state has at least one word slot that can never be satisfied, and can therefor never be part of the real solution
 			if (!leafNode.isLegalState()){
@@ -258,9 +260,6 @@ public class CPC {
 			}
 
 			strategy.addToExplored(leafNode);
-			if (leafNode == null){
-				System.err.println("This is bad");
-			}
 			// Somehow deal with early termination here
 			for (Node n : leafNode.getExpandedNodes()) { // The list of expanded nodes is shuffled randomly; see Node.java.
 				if (!strategy.isExplored(n) && !strategy.inFrontier(n)) {

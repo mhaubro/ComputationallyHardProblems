@@ -14,7 +14,7 @@ import chp.WordSlot.*;
 public class Node {
 	// These values are the same for every instance of Node
 
-	private static final Random RND = new Random(1);
+	private static final Random RND = new Random(3);
 	//private static final Random RND = new Random(2);
 	//private static final Random RND = new Random(3);
 

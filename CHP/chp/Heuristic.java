@@ -24,7 +24,7 @@ public abstract class Heuristic implements Comparator<Node> {
 
 		// return (penalty);
 
-		return (n.maxTileCount - n.currentFilledTileCount) * n.g();
+		return (n.maxTileCount - n.currentFilledTileCount) - n.g();
 	}
     
 	public abstract int f(Node n);
